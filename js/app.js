@@ -10,8 +10,8 @@ function iniciarApp() {
     const selectCatgoria = document.querySelector('#categorias')
     selectCatgoria.addEventListener('change', seleccionarCategoria);
 
-
     const resultado = document.querySelector('#resultado');
+    const modal = new bootstrap.Modal('#modal', {});
 
 
     ObtenerCategorias();
@@ -115,9 +115,36 @@ function iniciarApp() {
 
     }
 
+    //seleccionar receta 
+
     function seleccionarReceta(id) {
-        const url =` https://themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
-        console.log(url)
+        const url = ` https://themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
+        fetch(url)
+            .then(respuesta => respuesta.json())
+            .then(resultado => mostrarRecetaModal(resultado.meals[0]))
+    }
+
+    //mostrar receta modal
+    function mostrarRecetaModal(receta) {
+
+
+        const { idMeal, strMeal, strInstructions, strMealThumb, } = receta;
+
+        const Modaltitle = document.querySelector('.modal .modal-title');
+        const ModalBody = document.querySelector('.modal .modal-body');
+
+        Modaltitle.textContent = strMeal;
+        ModalBody.innerHTML =
+            `
+                    <img src="${strMealThumb} " alt="recetas" class="img-fluid" ${strMeal}>
+                    <h3>Instrucciones</h3>
+                    <p>${strInstructions}</p> 
+                `;
+
+
+
+        modal.show();
+
     }
 
 
